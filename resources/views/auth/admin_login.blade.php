@@ -31,10 +31,10 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="" class="h1"><b>USJ</b>Sample</a>
+      <a href="" class="h2"><b>Laravel App 1</b>(Docker)</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
+      <p class="login-box-msg">email -admin@sjp.ac.lk<br>password -123</p>
       <!-- Session Status -->
         <x-auth-session-status class="mb-4 text-dark" :status="session('status')" />
 
