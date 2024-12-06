@@ -1,21 +1,6 @@
 @extends('admin.admin_master')
-@section('admin')    
+@section('admin')
 <!-- Content Header (Page header) -->
-{{-- <section class="content-header">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-6">
-        <a href="{{ URL::previous() }}"  class="btn btn-danger mb-5">Back</a>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Category Type Add</li>
-        </ol>
-      </div>
-    </div>
-    </div><!-- /.container-fluid -->
-  </section> --}}
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -23,7 +8,9 @@
         <!-- left column -->
         <div class="col-md-12">
           <!-- general form elements -->
-          <div class="card card-primary">
+          @auth
+          <div class="card card-{{ auth()->user()->sidebar_color }}">
+          @endauth
             <div class="card-header">
               <h3 class="card-title"><a href="{{ URL::previous() }}"><i class="fa fa-arrow-circle-left" aria-hidden="true" style="font-size: 30px;"></i></a> Category Type Add Form</h3>
             </div>
@@ -40,19 +27,18 @@
                       <span class="text-danger">@error('category_type_name'){{$message}}@enderror</span>
                     </div>
                     </div><!-- col-md-6 -->
-                    {{-- <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                      </div>
-                    </div><!-- col-md-6 --> --}}
                  </div><!-- row -->
-                 
+
               </div>
                 <!-- /.card-body -->
+              @can('category.type.create')
               <div class="card-footer">
-                <input type="submit" class="btn btn-primary" value="submit" >
+                @auth
+                <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="submit" >
+                @endauth
                 </div>
+              @endcan
+
               </form>
             </div>
             <!-- /.card -->

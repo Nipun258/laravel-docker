@@ -1,21 +1,6 @@
 @extends('admin.admin_master')
 @section('admin')
 <!-- Content Header (Page header) -->
-{{-- <section class="content-header">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-6">
-        <a href="{{ URL::previous() }}"  class="btn btn-danger mb-5">Back</a>
-      </div>
-      <div class="col-sm-6">
-        <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active">Category Add</li>
-        </ol>
-      </div>
-    </div>
-    </div><!-- /.container-fluid -->
-  </section> --}}
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -23,7 +8,9 @@
         <!-- left column -->
         <div class="col-md-12">
           <!-- general form elements -->
-          <div class="card card-primary">
+          @auth
+          <div class="card card-{{ auth()->user()->sidebar_color }}">
+          @endauth
             <div class="card-header">
               <h3 class="card-title"><a href="{{ URL::previous() }}"><i class="fa fa-arrow-circle-left" aria-hidden="true" style="font-size: 30px;"></i></a> Category Add Form</h3>
             </div>
@@ -37,9 +24,9 @@
                     <div class="form-group">
                       <label for="">Category Type Name<span class="text-danger"> *</span></label>
                       <select name="category_type_name" id="category_type_name" required class="select2bs4" style="width: 100%">
-                        <option value="">Select Category Type</option>
+                        <option value="" selected disabled>Select Category Type</option>
                         @foreach($category_type as $category)
-                        <option value="{{ $category->id}}" {{  $category->id == old('category_type_name') ? 'selected' : '' }}>{{ ucfirst(preg_replace('/[_]/', ' ', $category->name))}}</option>
+                        <option value="{{ $category->id}}" {{  $category->name == old('category_type_name') ? 'selected' : '' }}>{{ ucfirst(preg_replace('/[_]/', ' ', $category->name))}}</option>
                         @endforeach
                     </select>
                       <span class="text-danger">@error('category_type_name'){{$message}}@enderror</span>
@@ -65,9 +52,13 @@
 
               </div>
                 <!-- /.card-body -->
+              @can('category.create')
               <div class="card-footer">
-                <input type="submit" class="btn btn-primary" value="submit" >
+                @auth
+                <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="submit" >
+                @endauth
                 </div>
+              @endcan
               </form>
             </div>
             <!-- /.card -->

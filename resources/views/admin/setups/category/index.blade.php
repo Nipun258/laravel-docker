@@ -9,7 +9,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                     <li class="breadcrumb-item active">Category</li>
                 </ol>
             </div><!-- /.col -->
@@ -27,7 +27,11 @@
                     <div class="box-header with-border">
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{ route('category.add') }}" style="float: right;" class="btn btn-success mb-5">Add Category</a>
+                                @can('category.create')
+                                @auth
+                                <a href="{{ route('category.add') }}" style="float: right;" class="btn  bg-{{ auth()->user()->sidebar_color }} mb-5">Add Category</a>
+                                @endauth
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -56,23 +60,16 @@
                                         <td>{{ $category->category_code }}</td>
                                         <td>{{ $category->sorting_order }}</td>
                                         <td>
+                                            @can('category.updation')
                                             <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-info">Edit <i class="fas fa-pencil-alt"></i></a>
+                                            @endcan
+                                            @can('category.delete')
                                             <a href="{{ route('category.delete', $category->id) }}" class="btn btn-sm btn-danger" id="delete">Delete <i class="fas fa-trash"></i></a>
-
+                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
-                                {{-- <tfoot>
-                                    <tr>
-                                        <th>SN</th>
-                                        <th>Emp No</th>
-                                        <th>NIC</th>
-                                        <th>Name</th>
-                                        <th>Phone No</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot> --}}
                             </table>
                         </div>
                     </div>

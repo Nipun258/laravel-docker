@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('permissions', function (Blueprint $table) {
-            $table->dropColumn('permission_group_id');
+            $table->dropColumn('permission_group_category_id');
         });
     }
 };

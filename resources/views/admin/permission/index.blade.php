@@ -11,8 +11,8 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Permission</li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Permission List</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,6 +33,7 @@
                                 <thead>
                                     <tr>
                                         <th width="5%">SN</th>
+                                        <th>Permission Group</th>
                                         <th>Name</th>
                                         <th>Guard</th>
                                         <th width="25%">Action</th>
@@ -42,12 +43,17 @@
                                     @foreach($permissions as $key => $permission)
                                     <tr>
                                         <td>{{ $key+1 }}</td>
+                                        <td>{{ ucfirst($permission->category_name) }}</td>
                                         <td>{{ $permission->name }}</td>
                                         <td>{{ $permission->guard_name }}</td>
 
                                         <td>
+                                            @can('permission.updation')
                                             <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-sm btn-info">Edit <i class="fas fa-pencil-alt"></i></a>
+                                            @endcan
+                                            @can('permission.delete')
                                             <a href="{{ route('permission.delete', $permission->id) }}" class="btn btn-sm btn-danger" id="delete">Delete <i class="fas fa-trash"></i></a>
+                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach

@@ -7,7 +7,9 @@
         <!-- left column -->
         <div class="col-md-12">
           <!-- general form elements -->
-          <div class="card card-danger">
+            @auth
+            <div class="card card-{{ auth()->user()->sidebar_color }}">
+            @endauth
             <div class="card-header">
               <h3 class="card-title"><a href="{{ URL::previous() }}"><i class="fa fa-arrow-circle-left" aria-hidden="true" style="font-size: 30px;"></i></a> User Edit Form</h3>
             </div>
@@ -55,9 +57,14 @@
                           </div><!-- row -->
                             </div>
                             <!-- /.card-body -->
+                            @can('user.updation')
                             <div class="card-footer">
-                              <input type="submit" class="btn btn-danger" value="Update" >
+                              @auth
+                              <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="Update" >
+                              <a href="{{ route('user.view') }}" class="btn {{ auth()->user()->sidebar_color == 'yellow' ? 'btn-dark' : 'btn-warning'}}">Cancel</a>
+                              @endauth
                             </div>
+                            @endcan
                           </form>
                         </div>
                         <!-- /.card -->

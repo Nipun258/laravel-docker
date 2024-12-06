@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="{{ asset('backend/dist/img/logo.png') }}" type="image/icon type">
-  <title>USJ Sample | Sign In </title>
+  <title>FGS MIS | Sign In </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -31,10 +31,10 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="" class="h2"><b>Laravel App 1</b>(Docker)</a>
+      <a href="" class="h1"><b>FGS</b>MIS</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">email -admin@sjp.ac.lk<br>password -123</p>
+      <p class="login-box-msg">Sign in to start your session</p>
       <!-- Session Status -->
         <x-auth-session-status class="mb-4 text-dark" :status="session('status')" />
 

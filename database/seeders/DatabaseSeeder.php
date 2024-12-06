@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategoryTypeSeeder::class,
             CategorySeeder::class,
+            PermissionSeeder::class,
+            PermissionRoleSeeder::class,
+            StudyBoardSeeder::class,
+            StudyBoardSubjectSeeder::class,
+            ChairPeopleSeeder::class,
+            IncomeTypeSeeder::class,
         ]);
     }
 }

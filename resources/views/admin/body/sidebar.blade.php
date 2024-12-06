@@ -3,12 +3,14 @@ $prefix = Request::route()->getPrefix();
 $route = Route::current()->getName();
 
 @endphp
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+@auth
+<aside class="main-sidebar sidebar-{{ auth()->user()->sidebar_theam }}-{{ auth()->user()->sidebar_color }} elevation-4">
+@endauth
   <!-- Brand Logo -->
   <a href="" class="brand-link">
     <img src="{{ asset('backend/dist/img/top.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light">
-      <h4 style="color:white"><b>USJ</b>Sample</h4>
+      <h4><b>FGS</b> MIS</h4>
       {{-- <p style="color:white;font-size:13px;text-align: center;font-weight: bold;">UNIVERSITY OF SRI JAYEWARDENEPURA</p></span> --}}
   </a>
 
@@ -26,9 +28,11 @@ $route = Route::current()->getName();
           @auth
           {{ strtoupper(auth()->user()->name) }}
           @endauth
+          <br>
+          <span class="" style="font-size: 12px">
+            <i class="nav-icon far fa-circle text-success"></i>&nbsp; Online</span>
         </a>
-        <span class="text-white" style="font-size: 12px">
-          <i class="nav-icon far fa-circle text-success"></i>&nbsp; Online</span>
+        </a>
       </div>
     </div>
 
@@ -49,6 +53,7 @@ $route = Route::current()->getName();
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+        @can('dashbord.view')
         <li class="nav-item menu-open">
           <a href="{{ route('dashboard') }}" class="nav-link {{ $route == 'dashboard'? 'active': '' }}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -58,26 +63,8 @@ $route = Route::current()->getName();
           </a>
 
         </li>
+        @endcan
 
-        {{-- <li class="nav-item">
-          <a href="#" class="nav-link {{ $prefix == '/profile'? 'active': '' }}">
-        <i class="nav-icon fas fa-user-plus"></i>
-        <p>
-          application
-          <i class="fas fa-angle-left right"></i>
-
-        </p>
-        </a>
-
-        <ul class="nav nav-treeview">
-          <li class="nav-item">
-            <a href="" class="nav-link">
-              <i class="far fa-circle nav-icon"></i>
-              <p>application</p>
-            </a>
-          </li>
-        </ul>
-        </li> --}}
         @role('Super-Admin|Admin|User')
         <li class="nav-item">
           <a href="#" class="nav-link {{ $prefix == '/profile'? 'active': '' }}">
@@ -88,6 +75,7 @@ $route = Route::current()->getName();
               {{-- <span class="badge badge-info right">1</span> --}}
             </p>
           </a>
+          @can('perofile.view')
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="{{ route('profile.view') }}" class="nav-link {{ $route == 'profile.view'? 'active': '' }}">
@@ -96,8 +84,10 @@ $route = Route::current()->getName();
               </a>
             </li>
           </ul>
+          @endcan
         </li>
         @endrole
+
         @role('Super-Admin|Admin')
         <li class="nav-item">
           <a href="#" class="nav-link {{ $prefix == '/user'? 'active': '' }}">
@@ -109,18 +99,22 @@ $route = Route::current()->getName();
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('user.view')
             <li class="nav-item">
               <a href="{{ route('user.view') }}" class="nav-link {{ $route == 'user.view'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>View Users</p>
               </a>
             </li>
+            @endcan
+            @can('user.create')
             <li class="nav-item">
               <a href="{{ route('user.add.view') }}" class="nav-link {{ $route == 'user.add.view'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Add New User</p>
               </a>
             </li>
+            @endcan
           </ul>
         </li>
         @endrole
@@ -135,18 +129,22 @@ $route = Route::current()->getName();
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('role.index')
             <li class="nav-item">
               <a href="{{ route('role.index') }}" class="nav-link {{ $route == 'role.index'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Role List</p>
               </a>
             </li>
+            @endcan
+            @can('role.create')
             <li class="nav-item">
               <a href="{{ route('role.add') }}" class="nav-link {{ $route == 'role.add'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Role Add</p>
               </a>
             </li>
+            @endcan
           </ul>
         </li>
         @endrole
@@ -161,23 +159,27 @@ $route = Route::current()->getName();
             </p>
           </a>
           <ul class="nav nav-treeview">
+            @can('permission.index')
             <li class="nav-item">
               <a href="{{ route('permission.index') }}" class="nav-link {{ $route == 'permission.index'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Permission List</p>
               </a>
             </li>
+            @endcan
+            @can('permission.create')
             <li class="nav-item">
               <a href="{{ route('permission.add') }}" class="nav-link {{ $route == 'permission.add'? 'active': '' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Permission Add</p>
               </a>
             </li>
+            @endcan
           </ul>
         </li>
         @endrole
 
-        @role('Super-Admin|Admin')
+      @role('Super-Admin|Admin')
       <li class="nav-item">
         <a href="#" class="nav-link {{ $prefix == '/setup'? 'active': '' }}">
           <i class="nav-icon fa fa-cogs"></i>
@@ -187,19 +189,70 @@ $route = Route::current()->getName();
           </p>
         </a>
         <ul class="nav nav-treeview">
-
+            @can('category.type.list')
           <li class="nav-item">
             <a href="{{ route('category.type.index')}}" class="nav-link {{ $route == 'category.type.index'? 'active': '' }}">
               <i class="far fa-circle nav-icon"></i>
               <p>Category Type</p>
             </a>
           </li>
+          @endcan
+          @can('category.list')
           <li class="nav-item">
             <a href="{{ route('category.index')}}" class="nav-link {{ $route == 'category.index'? 'active': '' }}">
               <i class="far fa-circle nav-icon"></i>
               <p>Category </p>
             </a>
           </li>
+          @endcan
+          @can('income.type.list')
+          <li class="nav-item">
+            <a href="{{ route('income.type.index')}}" class="nav-link {{ $route == 'income.type.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Income Type</p>
+            </a>
+          </li>
+          @endcan
+          @can('study.board.list')
+          <li class="nav-item">
+            <a href="{{ route('study.board.index')}}" class="nav-link {{ $route == 'study.board.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Study Board </p>
+            </a>
+          </li>
+          @endcan
+          @can('study.board.subject.list')
+          <li class="nav-item">
+            <a href="{{ route('study.board.subject.index')}}" class="nav-link {{ $route == 'study.board.subject.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Study Board Subject</p>
+            </a>
+          </li>
+          @endcan
+          @can('study.board.chair.person.list')
+          <li class="nav-item">
+            <a href="{{ route('study.board.chair.person.index')}}" class="nav-link {{ $route == 'study.board.chair.person.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Study Board Chair</p>
+            </a>
+          </li>
+          @endcan
+          @can('course.list')
+          <li class="nav-item">
+            <a href="{{ route('course.index')}}" class="nav-link {{ $route == 'course.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Course</p>
+            </a>
+          </li>
+          @endcan
+          @can('course.fee.list')
+          <li class="nav-item">
+            <a href="{{ route('course.fee.index')}}" class="nav-link {{ $route == 'course.fee.index'? 'active': '' }}">
+              <i class="far fa-circle nav-icon"></i>
+              <p>Course Fee</p>
+            </a>
+          </li>
+          @endcan
 
         </ul>
     </li>

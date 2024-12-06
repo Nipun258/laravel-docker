@@ -3,51 +3,46 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PermissionStoreRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            'auth',
-            new Middleware('role:Super-Admin'),
+            'auth'
         ];
     }
 
     public function permissionIndex()
     {
-
-        $permissions = Permission::all();
+        Gate::authorize('permission.index');
+        $permissions = Permission::join('categories', 'categories.id', '=', 'permissions.permission_group_category_id')
+                      ->select('permissions.*', 'categories.category_name as category_name')->get();
         return view('admin.permission.index', compact('permissions'));
 
     }
 
     public function permissionAdd()
     {
-
-        return view('admin.permission.add');
+        Gate::authorize('permission.create');
+        $categories = $this->getCategories([1]);
+        $premissionGroups = $categories->where('category_type_id', '1');
+        return view('admin.permission.add',compact('premissionGroups'));
 
     }
 
-    public function permissionStore(Request $request)
+    public function permissionStore(PermissionStoreRequest $request)
     {
 
-        $validatedData = $request->validate([
-            'name' => 'required|unique:permissions,name|min:3',
-        ], [
-            'name.required' => 'Enter Valid Permission Name',
-            'name.min' => 'Name Should be minimum 3 character'
-        ]);
+        Gate::authorize('permission.create');
 
-        $data = new Permission();
-        $data->name = $request->name;
-        $data->save();
+        Permission::create($request->prepareData());
 
         $notification = array(
             'message' => 'New Permission Inserted Successfully',
@@ -59,28 +54,19 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function permissionEdit($id)
     {
-
+        Gate::authorize('permission.updation');
         $permission = Permission::find($id);
+        $categories = $this->getCategories([1]);
+        $premissionGroups = $categories->where('category_type_id', '1');
         $roles = Role::all();
-        return view('admin.permission.edit', compact('permission','roles'));
+        return view('admin.permission.edit', compact('permission','roles','premissionGroups'));
 
     }
 
-    public function permissionUpdate(Request $request, $id)
+    public function permissionUpdate(PermissionStoreRequest $request, $id)
     {
-
-        Log::info('PermissionController -> permission update started');
-        $validatedData = $request->validate([
-            'name' => 'required|min:3',
-        ], [
-            'name.required' => 'Enter Valid Permission Name',
-            'name.min' => 'Name Should be minimum 3 character'
-        ]);
-
-
-        $data = Permission::find($id);
-        $data->name = $request->name;
-        $data->save();
+        Gate::authorize('permission.updation');
+        $request->persist($id);
 
         $notification = array(
             'message' => 'Permission data Updated Successfully',
@@ -93,6 +79,7 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function permissionDelete($id)
     {
+        Gate::authorize('permission.delete');
         $permission = Permission::find($id);
         $permission->delete();
 
@@ -107,6 +94,8 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function assignRole(Request $request, Permission $permission)
     {
+        Gate::authorize('permission.roles.assign');
+
         $validatedData = $request->validate([
             'role' => 'required',
         ], [
@@ -134,6 +123,8 @@ class PermissionController extends Controller implements HasMiddleware
 
     public function removeRole(Permission $permission, Role $role)
     {
+        Gate::authorize('permission.roles.remove');
+
         if ($permission->hasRole($role)) {
             $permission->removeRole($role);
 

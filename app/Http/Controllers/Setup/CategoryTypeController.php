@@ -9,7 +9,8 @@ use App\Models\CategoryType;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+//use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryTypeController extends Controller implements HasMiddleware
 {
@@ -17,29 +18,33 @@ class CategoryTypeController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware('role:Super-Admin|Admin'),
+            // new Middleware('role_or_permission:'),
         ];
     }
     public function CategoryTypeIndex()
     {
-        $categoryTypes =  CategoryType::all();
+        Gate::authorize('category.type.list');
 
+        $categoryTypes =  CategoryType::all();
         return view('admin.setups.category_type.index', compact('categoryTypes'));
     }
 
     public function CategoryTypeAdd()
     {
+        Gate::authorize('category.type.create');
         return view('admin.setups.category_type.add');
     }
 
     public function CategoryTypeStore(Request $request)
     {
+        Gate::authorize('category.type.create');
+
         $validatedData = $request->validate([
             'category_type_name' => 'required|unique:category_types,name',
         ]);
 
         $data = new CategoryType();
-        $data->name = $request->category_type_name;
+        $data->name = ucwords($request->category_type_name);
         $data->slug = strtolower($request->category_type_name);
         $data->created_at = Carbon::now();
         $data->save();
@@ -54,19 +59,22 @@ class CategoryTypeController extends Controller implements HasMiddleware
 
     public function CategoryTypeEdit($id)
     {
+        Gate::authorize('category.type.updation');
+
         $editData = CategoryType::find($id);
         return view('admin.setups.category_type.edit', compact('editData'));
     }
 
     public function CategoryTypeUpdate(Request $request, $id)
     {
+        Gate::authorize('category.type.updation');
 
         $validatedData = $request->validate([
             'name' => ['required', Rule::unique('category_types')->ignore($id)],
         ]);
 
         $data = CategoryType::find($id);
-        $data->name = $request->name;
+        $data->name = ucwords($request->name);
         $data->slug = strtolower($request->name);
         $data->save();
 
@@ -80,6 +88,7 @@ class CategoryTypeController extends Controller implements HasMiddleware
 
     public function CategoryTypeDelete($id)
     {
+        Gate::authorize('category.type.delete');
 
         $catagory = CategoryType::find($id);
         $catagory->delete();
@@ -94,7 +103,7 @@ class CategoryTypeController extends Controller implements HasMiddleware
 
     public function CategoryList($id)
     {
-
+        Gate::authorize('category.list.check');
         $categoryType = CategoryType::find($id);
         $categories = Category::where('category_type_id', $id)->get();
 

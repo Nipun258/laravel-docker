@@ -23,7 +23,9 @@
         <!-- left column -->
         <div class="col-md-12">
           <!-- general form elements -->
-          <div class="card card-primary">
+          @auth
+          <div class="card card-{{ auth()->user()->sidebar_color }}">
+          @endauth
             <div class="card-header">
               <h3 class="card-title"><a href="{{ URL::previous() }}" ><i class="fa fa-arrow-circle-left" aria-hidden="true" style="font-size: 30px;"></i></a> Permission Add Form</h3>
             </div>
@@ -34,6 +36,18 @@
               @csrf
               <div class="card-body">
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="">Permission Group<span class="text-danger"> *</span></label>
+                          <select name="permission_group" id="permission_group" class="select2bs4" style="width: 100%">
+                            <option value="" selected disabled>Select Permission Group</option>
+                            @foreach($premissionGroups as $category)
+                            <option value="{{ $category->id}}" {{  $category->id == old('permission_group') ? 'selected' : '' }}>{{ ucfirst(preg_replace('/[_]/', ' ', $category->category_name))}}</option>
+                            @endforeach
+                        </select>
+                          <span class="text-danger">@error('permission_group'){{$message}}@enderror</span>
+                        </div>
+                        </div><!-- col-md-6 -->
                   <div class="col-md-12">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Permission Name<span class="text-danger"> *</span></label>
@@ -41,19 +55,19 @@
                       <span class="text-danger">@error('name'){{$message}}@enderror</span>
                     </div>
                     </div><!-- col-md-6 -->
-                    {{-- <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                      </div>
-                    </div><!-- col-md-6 --> --}}
+
                  </div><!-- row -->
 
               </div>
                 <!-- /.card-body -->
-              <div class="card-footer">
-                <input type="submit" class="btn btn-primary" value="Create" >
-                </div>
+                @can('permission.create')
+                <div class="card-footer">
+                    @auth
+                    <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="Create" >
+                    @endauth
+                    </div>
+                @endcan
+
               </form>
             </div>
             <!-- /.card -->

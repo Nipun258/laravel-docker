@@ -9,8 +9,8 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Role</li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Role List</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -44,9 +44,15 @@
                                         <td>{{ $role->name }}</td>
                                         <td>{{ $role->guard_name }}</td>
                                         <td>
+                                            @can('role.permission.update')
+                                            <a href="{{ route('role.permission.list', $role->id) }}" class="btn btn-sm btn-success">Permission <i class="fa fa-bars"></i></a>
+                                            @endcan
+                                            @can('role.updation')
                                             <a href="{{ route('role.edit', $role->id) }}" class="btn btn-sm btn-info">Edit <i class="fas fa-pencil-alt"></i></a>
+                                            @endcan
+                                            @can('role.delete')
                                             <a href="{{ route('role.delete', $role->id) }}" class="btn btn-sm btn-danger" id="delete">Delete <i class="fas fa-trash"></i></a>
-                                            <a href="{{ route('role.permission.list', $role->id) }}" class="btn btn-sm btn-success">Assign Permission <i class="fa fa-bars"></i></a>
+                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach

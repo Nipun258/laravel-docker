@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
     {
         $user = User::create([
             'name' => 'Super Admin',
+            'reg_no' => 12393,
             'email' => 'superadmin@sjp.ac.lk',
             'status' => 1,
             'email_verified_at' => now(),
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
 
         $user = User::create([
             'name' => 'Admin',
+            'reg_no' => 11301,
             'email' => 'admin@sjp.ac.lk',
             'status' => 1,
             'email_verified_at' => now(),
@@ -33,6 +35,7 @@ class UserSeeder extends Seeder
 
         $user = User::create([
             'name' => 'User',
+            'reg_no' => 12394,
             'email' => 'user@sjp.ac.lk',
             'status' => 1,
             'email_verified_at' => now(),

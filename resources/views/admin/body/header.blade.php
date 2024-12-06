@@ -1,4 +1,6 @@
-<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+@auth
+<nav class="main-header navbar navbar-expand {{ auth()->user()->dark_mode == 1 ? 'navbar-dark' : auth()->user()->nav_color }} navbar-light ">
+@endauth
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -59,12 +61,19 @@
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
+      </li> --}}
+      @can('site.setting.index')
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('site.setting.index') }}" role="button">
+          <i class="fa fa-cogs"></i>
+        </a>
       </li>
+      @endcan
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
-      </li> --}}
+      </li>
 
       <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">

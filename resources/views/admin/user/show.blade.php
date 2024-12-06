@@ -86,7 +86,9 @@
       </div>
       <!-- /.card -->
 
-      <div class="card card-primary">
+       @auth
+        <div class="card card-{{ auth()->user()->sidebar_color }}">
+       @endauth
         <div class="card-header">
           <h3 class="card-title">Role Assign to User</h3>
         </div>
@@ -100,8 +102,10 @@
                 <div class="col-md-12">
                     @if ($user->roles)
                     @foreach ($user->roles as $user_role)
-                    @if ($user_role->name != 'user')
+                    @if ($user_role->name != 'User')
+                    @can('user.roles.remove')
                         <a href="{{ route('users.roles.remove', [$user->id, $user_role->id]) }}" class="btn btn-sm btn-success" id="delete">{{ $user_role->name }} <i class="fa fa-times"></i></a>
+                    @endcan
                     @else
                     <button type="button" class="btn btn-sm btn-dark">{{ $user_role->name }} </button>
                     @endif
@@ -117,7 +121,6 @@
                             style="width: 100%;">
                     <option value="" selected disabled>Select Role</option>
                       @foreach ($roles as $role)
-
                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
                     </select>
@@ -130,13 +133,20 @@
 
                         </div>
                         <!-- /.card-body -->
+                        @can('user.roles.assign')
                         <div class="card-footer">
-                          <input type="submit" class="btn btn-danger" value="Assign" >
+                        @auth
+                        <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="Assign" >
+                        <a href="{{ route('user.view') }}" class="btn {{ auth()->user()->sidebar_color == 'yellow' ? 'btn-dark' : 'btn-warning'}}">Cancel</a>
+                        @endauth
                         </div>
+                        @endcan
                       </form>
                     </div>
 
-      <div class="card card-primary">
+                    @auth
+                    <div class="card card-{{ auth()->user()->sidebar_color }}">
+                    @endauth
         <div class="card-header">
           <h3 class="card-title">Permission Assign to User</h3>
         </div>
@@ -150,9 +160,9 @@
                 <div class="col-md-12">
                     @if ($user->permissions)
                     @foreach ($user->permissions as $user_permission)
-
+                    @can('user.permissions.revoke')
                         <a href="{{ route('users.permissions.revoke', [$user->id, $user_permission->id]) }}" class="btn btn-sm btn-success" id="delete">{{ $user_permission->name }} <i class="fa fa-times"></i></a>
-
+                    @endcan
                     @endforeach
                     @endif
                 </div>
@@ -178,9 +188,14 @@
 
                         </div>
                         <!-- /.card-body -->
+                        @can('user.permissions.assign')
                         <div class="card-footer">
-                          <input type="submit" class="btn btn-danger" value="Assign" >
+                        @auth
+                          <input type="submit" class="btn bg-{{ auth()->user()->sidebar_color }}" value="Assign" >
+                          <a href="{{ route('user.view') }}" class="btn {{ auth()->user()->sidebar_color == 'yellow' ? 'btn-dark' : 'btn-warning'}}">Cancel</a>
+                        @endauth
                         </div>
+                        @endcan
                       </form>
                     </div>
 

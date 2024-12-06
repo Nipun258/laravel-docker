@@ -9,7 +9,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                     <li class="breadcrumb-item active">System Users List</li>
                 </ol>
             </div><!-- /.col -->
@@ -37,7 +37,7 @@
                                         <th>Roles</th>
                                         @endrole
                                         <th>Status</th>
-                                        <th width="20%">Action</th>
+                                        <th width="25%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,14 +66,15 @@
                                         @endif
                                         </td>
                                         <td>
-                                            @role('Super-Admin|Admin')
-                                            <a href="{{ route('user.show',$user->id) }}" class="btn btn-sm btn-info">Show</a>
-                                            @endrole
-
-                                            @role('Super-Admin|Admin')
-                                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-primary" id="step-two">Edit</a>
-                                            <a href="{{ route('user.delete', $user->id) }}" class="btn btn-sm btn-warning" id="delete">Delete</a>
-                                            @endrole
+                                            @can('user.show')
+                                            <a href="{{ route('user.show',$user->id) }}" class="btn btn-sm btn-success">Show <i class="fa fa-eye"></i></a>
+                                            @endcan
+                                            @can('user.updation')
+                                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-info" id="step-two">Edit <i class="fas fa-pencil-alt"></i></a>
+                                            @endcan
+                                            @can('user.delete')
+                                            <a href="{{ route('user.delete', $user->id) }}" class="btn btn-sm btn-danger" id="delete">Delete <i class="fas fa-trash"></i></a>
+                                            @endcan
                                         </td>
                                     </tr>
                                     @endforeach

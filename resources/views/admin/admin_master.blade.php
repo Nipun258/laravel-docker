@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <title>USJ | Sample Project</title>
+    <title>FGS | MIS</title>
     <link rel="icon" href="{{ asset('backend/dist/img/logo.png') }}" type="image/icon type">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -74,7 +74,9 @@
     </style>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+@auth
+<body class="hold-transition sidebar-mini {{ auth()->user()->dark_mode == 1 ? 'dark-mode' : '' }} {{ auth()->user()->sidebar_layout }} {{ auth()->user()->nav_layout }} {{ auth()->user()->footer_layout }}">
+@endauth
     <div class="wrapper">
 
         <!-- Preloader -->
@@ -265,8 +267,15 @@
             });
 
 
-            //Date picker
-            $('#date_opened').datetimepicker({
+            //appointment start date picker
+            $('#start_date').datetimepicker({
+                format: 'YYYY-MM-DD',
+                useCurrent: false
+
+            });
+
+            //Appointment termination date picker
+            $('#end_date').datetimepicker({
                 format: 'YYYY-MM-DD',
                 useCurrent: false
 
